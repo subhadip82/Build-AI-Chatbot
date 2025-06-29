@@ -38,6 +38,17 @@
       </li>
     </ul>
 
+    <!--CHATS  CONTYENER-->
+    <div class="chats-container">
+      <div class="message user-message">
+        <p class="message-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque quaerat explicabo quidem laudantium beatae unde consequuntur in sequi laboriosam, molestias quia saepe maiores!</p>
+      </div>
+      <div class="message bot-message">
+        <img src="https://png.pngtree.com/png-vector/20220623/ourmid/pngtree-feather-blue-logo-template-png-image_5172158.png" class="avatar">
+        <p class="message-text>lorem">Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque quaerat explicabo quidem laudantium beatae unde consequuntur in sequi laboriosam, molestias quia saepe maiores!</p>
+      </div>
+    </div>
+
     <!-- Prompt container -->
     <div class="prompt-container">
       <div class="prompt-wrapper">
@@ -45,15 +56,15 @@
         <form action="#" class="prompt-form">
           <input type="text" placeholder="Ask Dbot" class="prompt-input" required >
           <div class="prompt-action">
+             <button id="microphonr-voice-btn" type="button" class="material-symbols-rounded">mic</button>
             <button id="add-file-btn" type="button" class="material-symbols-rounded">attach_file</button>
             <button id="send-prompt-btn" type="button" class="material-symbols-rounded">arrow_upward</button>
           </div>
         </form>
 
-
         <button id="theme-toggle-btn" type="button" class="material-symbols-rounded">light_mode</button>
-         <button id="delete-chats-btn" type="button" class="material-symbols-rounded">delete</button>
-          <button id="microphonr-voice-btn" type="button" class="material-symbols-rounded">mic</button>
+        <button id="delete-chats-btn" type="button" class="material-symbols-rounded">delete</button>
+        
       </div>
 
       <p class="disclaimer-text">Dbot can make mistakes, so double-check it .</p>
