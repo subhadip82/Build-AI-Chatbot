@@ -1,0 +1,110 @@
+/* i mportting Google fontsm - poppins*/
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+}
+:root{
+    --text-color:#edf3ff;
+    --subheading-color:#97a7ca;
+    --placeholder-color:#c3cdde;
+    --primary-color: #101623;
+    --secondary-color: #283045;
+    --secondary-hover-color: #333e58;
+    --scrollbar-color:#626a7f;
+
+
+}
+body{
+    color: var(--text-color);
+    background: var(--primary-color);
+}
+.container{
+    padding: 30px 40px 50px ;
+    margin-left: 300px;
+    
+}
+.container :where(.app-header, .suggestions ,.prompt-wrapper , 
+.disclaimer-text) {
+    margin: 0 aut0;
+    width: 100%;
+    padding: 0 20px;
+    max-width: 980px;
+}
+/* app heder styling*/
+.container .app-header{
+    margin-top: 4vh;
+}
+.app-header .heading{
+    font-size: 3rem;
+    width: fit-content;
+    background: linear-gradient(to right , #1d7efd , #8f6fff);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+.app-header .sub-heading{
+    font-size: 2.6rem;
+    margin-top: -5px;
+    margin-bottom: 50px;
+    color: var(--subheading-color);
+}
+
+/* suggection styling */
+
+.container .suggestions{
+ display: flex;
+ gap: 15px;
+ margin-top: 9.5hv;
+ list-style: none;
+ overflow-x: auto;
+ scrollbar-width: none;
+}
+
+.suggestions .suggestion-item{
+    width: 228px;
+    padding: 18px;
+    flex-shrink: 0;
+    display: flex;
+    cursor: pointer;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: space-between;
+    border-radius: 12px;
+    background: var(--secondary-color);
+    transition: 0.3s ease;
+}
+.suggestions .suggestion-item:hover{
+background: var(--secondary-hover-color);
+}
+
+.suggestions .suggestion-item .text{
+   font-size: 1.1rem
+}
+
+.suggestions .suggestion-item span{
+height: 45px;
+width: 45px;
+margin-top: 35px;
+align-self: flex-end;
+display: flex;
+align-items: center;
+justify-content: center;
+border-radius: 50%;
+color: #1d7efd;
+background: var(--primary-color);
+}
+.suggestions .suggestion-item:nth-child(2) span{
+   color: green;
+}
+
+.suggestions .suggestion-item:nth-child(3) span{
+   color: rgb(225, 0, 12);
+}
+
+.suggestions .suggestion-item:nth-child(4) span{
+   color: rgb(224, 228, 14);
+}
