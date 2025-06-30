@@ -165,9 +165,10 @@ background: var(--primary-color);
 /*promt contener styling */
 
 .prompt-container {
-    position: fixed;
+    position: auto;
+    margin-top: 400px;
+    margin-left: 60px;
     bottom: 0;
-    left: 400px;
     width: 100%;
     padding: 16px 0;
     background: var(--primary-color);
