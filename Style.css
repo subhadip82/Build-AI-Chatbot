@@ -16,7 +16,6 @@
     --secondary-hover-color: #333e58;
     --scrollbar-color:#626a7f;
 
-
 }
 body{
     color: var(--text-color);
@@ -28,7 +27,7 @@ body{
     max-height: calc(100vh - 127px);
     padding: 30px 40px 50px ;
     margin-left: 250px;
-    scrollbar-color: var( --scrollbar-color) ;
+    scrollbar-color: var( --scrollbar-color) transparent;
     
 }
 .container :where(.app-header, .suggestions ,.message,.prompt-wrapper , 
@@ -242,11 +241,36 @@ animation: rotate 3s linear infinite;
     gap: 5px;
     margin-right: 7px;
 }
-
-.prompt-form .prompt-action  button{
+/*file attch styling */
+ .prompt-wrapper .prompt-form :where(.file-upload-wrapper, button, img){
+position: relative;
 height: 45px;
 width: 45px;
 } 
+
+.prompt-form .file-upload-wrapper :where(button, img){
+    position: absolute;
+    border-radius: 50%;
+    object-fit: cover;
+    display: none;
+    
+}
+.prompt-form .file-upload-wrapper #add-file-btn,
+.prompt-form .file-upload-wrapper.active.img-attached img,
+.prompt-form .file-upload-wrapper.active.file-attached .file-icon,
+.prompt-form .file-upload-wrapper.active:hover #cancel-file-btn {
+    display: block;
+}
+.prompt-form .file-upload-wrapper.active #add-file-btn{
+    display: none;
+}
+
+.prompt-form #cancel-file-btn{
+    color: red;
+}
+.prompt-form .file-icon{
+    color: #1d7efd;
+}
  
  .prompt-form #send-prompt-btn{
     color: white;
@@ -268,3 +292,122 @@ width: 45px;
     0 0 25px rgb(42, 55, 203), 0 0 50px rgb(51, 53, 195),
     0 0 100px rgb(51, 46, 197), 0 0 200px rgb(55, 55, 192)
  }
+
+
+ /* --- Your original CSS code (unchanged) --- */
+
+/* your full code as you shared above */
+
+/* --------------------------- */
+/*      MEDIA QUERIES          */
+/* --------------------------- */
+
+/* Large tablets and small desktops (max-width: 1200px) */
+@media (max-width: 1200px) {
+  .container {
+    margin-left: 200px;
+    padding: 20px 30px 50px;
+  }
+  .container :where(.app-header, .suggestions, .message, .prompt-wrapper, .disclaimer-text) {
+    padding: 0 15px;
+  }
+  .chats-container .user-message .message-text {
+    max-width: 80%;
+  }
+}
+
+/* Tablets (max-width: 992px) */
+@media (max-width: 992px) {
+  .container {
+    margin-left: 0;
+    padding: 20px 20px 50px;
+  }
+  .container :where(.app-header, .suggestions, .message, .prompt-wrapper, .disclaimer-text) {
+    padding: 0 10px;
+  }
+  .chats-container .user-message .message-text {
+    max-width: 90%;
+    margin-right: 20px;
+  }
+}
+
+/* Small tablets and large mobiles (max-width: 768px) */
+@media (max-width: 768px) {
+  .container {
+    padding: 15px 15px 40px;
+  }
+  .app-header .heading {
+    font-size: 2.2rem;
+  }
+  .app-header .sub-heading {
+    font-size: 1.6rem;
+  }
+  .suggestions .suggestion-item {
+    width: 180px;
+    padding: 14px;
+  }
+  .chats-container .bot-message .avatar {
+    height: 45px;
+    width: 45px;
+  }
+  .prompt-container {
+    margin-left: 0;
+    padding: 12px 0;
+  }
+  .prompt-wrapper .prompt-form {
+    border-radius: 100px;
+  }
+}
+
+/* Mobiles (max-width: 576px) */
+@media (max-width: 576px) {
+  .app-header .heading {
+    font-size: 1.8rem;
+  }
+  .app-header .sub-heading {
+    font-size: 1.2rem;
+  }
+  .suggestions .suggestion-item {
+    width: 150px;
+    padding: 12px;
+  }
+  .chats-container .user-message .message-text {
+    margin-right: 10px;
+    max-width: 95%;
+  }
+  .prompt-wrapper .prompt-form {
+    height: 48px;
+  }
+  .prompt-form .prompt-input {
+    font-size: 0.9rem;
+    padding-left: 15px;
+  }
+  .prompt-wrapper button {
+    width: 48px;
+    font-size: 1.2rem;
+  }
+  .prompt-container .disclaimer-text {
+    font-size: 0.8rem;
+    padding: 12px 15px 0;
+  }
+}
+
+/* Extra small mobiles (max-width: 400px) */
+@media (max-width: 400px) {
+  .app-header .heading {
+    font-size: 1.5rem;
+  }
+  .app-header .sub-heading {
+    font-size: 1rem;
+  }
+  .suggestions .suggestion-item {
+    width: 130px;
+    padding: 10px;
+  }
+  .prompt-wrapper .prompt-form {
+    border-radius: 80px;
+  }
+  .prompt-wrapper button {
+    width: 40px;
+  }
+}
