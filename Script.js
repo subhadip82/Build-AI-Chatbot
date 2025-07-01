@@ -15,6 +15,28 @@ const createMsgElement = (content, ...classes) => {
     div.innerHTML = content;
     return div;
 };
+//simulate typing effect for bot responce
+const typingEffect = (text, textElement, botMsgDiv) => {
+  textElement.textContent= "";
+  const words = text.split(" ");
+  let wordIndex = 0 ;
+
+// set an interavl to type each word 
+const typingInterval = setInterval(() => {
+  if (wordIndex < words.length)  {
+    textElement.textContent += (wordIndex === 0 ? "" :" ") + words[wordIndex++];
+    botMsgDiv.classList.remove("loading");
+  } else {
+  clearInterval(typingInterval);
+  }
+} , 40)
+
+}
+
+
+
+
+
 
 const generateResponse = async (botMsgDiv) => {
     const textElement= botMsgDiv.querySelector(".message-text");
@@ -31,9 +53,9 @@ const generateResponse = async (botMsgDiv) => {
       });
 const data = await response.json();
 if(!response.ok) throw new Error(data.error.message);
-
+// process the responcccce text and display 
 const responseText = data.candidates[0].content.parts[0].text.replace(/\*\*([^*]+)\*\*/g, "$1").trim();
-textElement.textContent = responseText;
+typingEffect(responseText, textElement, botMsgDiv);
 console.log(data);
   } catch{ ( error)
 console.log(erroe);
