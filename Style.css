@@ -23,8 +23,12 @@ body{
     background: var(--primary-color);
 }
 .container{
+    overflow: auto;
+    padding: 32px 0 60px;
+    max-height: calc(100vh - 127px);
     padding: 30px 40px 50px ;
     margin-left: 250px;
+    scrollbar-color: var( --scrollbar-color) ;
     
 }
 .container :where(.app-header, .suggestions ,.message,.prompt-wrapper , 
