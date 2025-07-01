@@ -7,16 +7,16 @@ const cancelFileBtn = document.getElementById("cancel-file-btn");
 const filePreview = document.querySelector(".file-preview");
 
 const arrow = document.getElementById("send-prompt-btn");
-const fileUploadWrapper = promptForm.querySelector(".file-upload-wrapper ");
+const fileUploadWrapper = promptForm.querySelector(".file-upload-wrapper");
 
 // API setup
 const API_KEY = "AIzaSyCdDzUc-rM6Rqz8_A_BqWH_0OcffaEIcrY";
 const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
 
-let userMessage = "";
+let userData = { message: "", file: {} };
 const chatHistory = [];
 
-// Function to create message element
+// Create message element
 const createMsgElement = (content, ...classes) => {
     const div = document.createElement("div");
     div.classList.add("message", ...classes);
@@ -27,7 +27,7 @@ const createMsgElement = (content, ...classes) => {
 // Scroll to bottom
 const scrollToBottom = () => chatsContainer.scrollTo({ top: chatsContainer.scrollHeight, behavior: "smooth" });
 
-// Typing effect for bot response
+// Typing effect
 const typingEffect = (text, textElement, botMsgDiv) => {
     textElement.textContent = "";
     const words = text.split(" ");
@@ -46,24 +46,42 @@ const typingEffect = (text, textElement, botMsgDiv) => {
 
 const generateResponse = async (botMsgDiv) => {
     const textElement = botMsgDiv.querySelector(".message-text");
+
+    // Prepare parts array
+    const parts = [];
+    if (userData.message) {
+        parts.push({ text: userData.message });
+    }
+    if (userData.file.data) {
+        parts.push({
+            inline_data: {
+                mime_type: userData.file.mime_type,
+                data: userData.file.data
+            }
+        });
+    }
+
     chatHistory.push({
         role: "user",
-        parts: [{ text: userMessage }]
+        parts: parts
     });
 
     try {
         const response = await fetch(API_URL, {
             method: "POST",
-            headers: { "content-type": "application/json" },
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ contents: chatHistory })
         });
 
         const data = await response.json();
         if (!response.ok) throw new Error(data.error.message);
 
-        const responseText = data.candidates[0].content.parts[0].text.replace(/\*\*([^*]+)\*\*/g, "$1").trim();
+        const responseText = data.candidates[0].content.parts[0].text.trim();
         typingEffect(responseText, textElement, botMsgDiv);
-        console.log(data);
+
+        chatHistory.push({ role: "model", parts: [{ text: responseText }] });
+
+        console.log(chatHistory);
     } catch (error) {
         console.log(error);
         textElement.textContent = "⚠️ Sorry, something went wrong!";
@@ -73,69 +91,67 @@ const generateResponse = async (botMsgDiv) => {
 
 const handleFormSubmit = (e) => {
     e.preventDefault();
-    userMessage = promptInput.value.trim();
-    if (!userMessage) return;
+    const message = promptInput.value.trim();
+    if (!message && !userData.file.data) return;
 
     promptInput.value = "";
+    userData.message = message;
 
+    // Add user message element
     const userMsgHTML = `<p class="message-text"></p>`;
     const userMsgDiv = createMsgElement(userMsgHTML, "user-message");
-    userMsgDiv.querySelector(".message-text").textContent = userMessage;
+    userMsgDiv.querySelector(".message-text").textContent = message;
     chatsContainer.appendChild(userMsgDiv);
     scrollToBottom();
 
+    // Bot typing
     setTimeout(() => {
         const botMsgHTML = `<img src="https://png.pngtree.com/png-clipart/20241223/original/pngtree-cool-blue-dragon-logo-png-image_18141282.png" class="avatar"><p class="message-text">Just a sec..</p>`;
         const botMsgDiv = createMsgElement(botMsgHTML, "bot-message", "loading");
         chatsContainer.appendChild(botMsgDiv);
         scrollToBottom();
         generateResponse(botMsgDiv);
+
+        // Reset file after sending
+        fileUploadWrapper.classList.remove("active", "img-attached", "file-attached");
+        userData.file = {};
     }, 500);
 };
 
-// Listen to form submit
-// promptForm.addEventListener("submit", handleFormSubmit);
+// Listen to button click
 document.getElementById("send-prompt-btn").addEventListener("click", handleFormSubmit);
 
-
-// ✅ File input logic
+// ✅ File upload logic
 document.getElementById("add-file-btn").addEventListener("click", () => {
     fileInput.click();
 });
 
 fileInput.addEventListener("change", () => {
-    if (fileInput.files && fileInput.files[0]) {
-        const file = fileInput.files[0];
-        if (file.type.startsWith("image/")) {
-            const reader = new FileReader();
-            reader.onload = function (e) {
-                filePreview.src = e.target.result;
-                filePreview.style.display = "block";
-            };
-            reader.readAsDataURL(file);
-        } else {
-            filePreview.src = "";
-            filePreview.style.display = "none";
-        }
-    }
+    const file = fileInput.files[0];
+    if (!file) return;
+
+    const isImage = file.type.startsWith("image/");
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+
+    reader.onload = (e) => {
+        fileInput.value = "";
+        const base64String = e.target.result.split(",")[1];
+        fileUploadWrapper.querySelector(".file-preview").src = e.target.result;
+        fileUploadWrapper.classList.add("active", isImage ? "img-attached" : "file-attached");
+
+        // Store file data
+        userData.file = {
+            fileName: file.name,
+            data: base64String,
+            mime_type: file.type,
+            isImage
+        };
+    };
 });
 
-fileInput.addEventListener("change", () => {
-  const file =fileInput.files[0];
-  if(!file) return;
-
-  const isImage = file.type.startsWith("image/");
-  const reader = new FileReader();
-  reader.readAsDataURL(file);
-
-  reader.onload = (e) => {
-    fileInput.value = "";
-    fileUploadWrapper.querySelector(".file-preview").src = e.target.result;
-fileUploadWrapper.classList.add("active", isImage ? "img-attached" : "file-attached");
-  }
-});
-
-// image remove button mens cancle button 
-document.querySelector("#cancel-file-btn").addEventListener("click",() => {
-fileUploadWrapper.classList.remove("active",  "img-attached" , "file-attached");
+// Cancel file
+document.querySelector("#cancel-file-btn").addEventListener("click", () => {
+    fileUploadWrapper.classList.remove("active", "img-attached", "file-attached");
+    userData.file = {};
 });
