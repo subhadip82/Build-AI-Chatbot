@@ -7,6 +7,7 @@ const cancelFileBtn = document.getElementById("cancel-file-btn");
 const filePreview = document.querySelector(".file-preview");
 
 const arrow = document.getElementById("send-prompt-btn");
+const fileUploadWrapper = promptForm.querySelector(".file-upload-wrapper ");
 
 // API setup
 const API_KEY = "AIzaSyCdDzUc-rM6Rqz8_A_BqWH_0OcffaEIcrY";
@@ -123,5 +124,18 @@ fileInput.addEventListener("change", () => {
   const file =fileInput.files[0];
   if(!file) return;
 
-  console.log(file);
+  const isImage = file.type.startsWith("image/");
+  const reader = new FileReader();
+  reader.readAsDataURL(file);
+
+  reader.onload = (e) => {
+    fileInput.value = "";
+    fileUploadWrapper.querySelector(".file-preview").src = e.target.result;
+fileUploadWrapper.classList.add("active", isImage ? "img-attached" : "file-attached");
+  }
+});
+
+// image remove button mens cancle button 
+document.querySelector("#cancel-file-btn").addEventListener("click",() => {
+fileUploadWrapper.classList.remove("active",  "img-attached" , "file-attached");
 });
