@@ -15,6 +15,9 @@ const createMsgElement = (content, ...classes) => {
     div.innerHTML = content;
     return div;
 };
+// scroll top to buoom autometecly
+const scrollToBottom = () => chatsContainer.scrollTo({ top: chatsContainer.scrollHeight, behavior: "smooth"});
+
 //simulate typing effect for bot responce
 const typingEffect = (text, textElement, botMsgDiv) => {
   textElement.textContent= "";
@@ -26,6 +29,7 @@ const typingInterval = setInterval(() => {
   if (wordIndex < words.length)  {
     textElement.textContent += (wordIndex === 0 ? "" :" ") + words[wordIndex++];
     botMsgDiv.classList.remove("loading");
+    scrollToBottom();
   } else {
   clearInterval(typingInterval);
   }
@@ -82,6 +86,7 @@ const handleFormSubmit = (e) => {
 
     userMsgDiv.querySelector(".message-text").textContent = userMessage;
     chatsContainer.appendChild(userMsgDiv);
+    scrollToBottom();
 
 
     setTimeout(() => {
@@ -89,6 +94,7 @@ const handleFormSubmit = (e) => {
     const botMsgHTML = `<img src="https://png.pngtree.com/png-clipart/20241223/original/pngtree-cool-blue-dragon-logo-png-image_18141282.png" class="avatar"><p class="message-text">Just a sec..</p>`;
     const botMsgDiv = createMsgElement(botMsgHTML, "bot-message", "loading");
     chatsContainer.appendChild(botMsgDiv);
+    scrollToBottom();
      generateResponse(botMsgDiv);
     }, 500);
 
