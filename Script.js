@@ -86,6 +86,8 @@ const generateResponse = async (botMsgDiv) => {
         console.log(error);
         textElement.textContent = "⚠️ Sorry, something went wrong!";
         botMsgDiv.classList.remove("loading");
+    } finally {
+        userData.file = {};
     }
 };
 
@@ -98,8 +100,10 @@ const handleFormSubmit = (e) => {
     userData.message = message;
 
     // Add user message element
-    const userMsgHTML = `<p class="message-text"></p>`;
+    const userMsgHTML = `<p class="message-text"></p>
+    ${userData.file.data ? (userData.file.isImage ? `<img src="data:${userData.file.mime_type};base64,${userData.file.data}" class="img-attachment" />` : `<p class="file-attachment"><span class="material-symbols-rounded">description</span>${userData.file.fileName}</p>`) : ""}`;
     const userMsgDiv = createMsgElement(userMsgHTML, "user-message");
+
     userMsgDiv.querySelector(".message-text").textContent = message;
     chatsContainer.appendChild(userMsgDiv);
     scrollToBottom();
@@ -114,6 +118,7 @@ const handleFormSubmit = (e) => {
 
         // Reset file after sending
         fileUploadWrapper.classList.remove("active", "img-attached", "file-attached");
+        filePreview.src = "";
         userData.file = {};
     }, 500);
 };
@@ -121,7 +126,7 @@ const handleFormSubmit = (e) => {
 // Listen to button click
 document.getElementById("send-prompt-btn").addEventListener("click", handleFormSubmit);
 
-// ✅ File upload logic
+// File upload logic
 document.getElementById("add-file-btn").addEventListener("click", () => {
     fileInput.click();
 });
@@ -137,7 +142,7 @@ fileInput.addEventListener("change", () => {
     reader.onload = (e) => {
         fileInput.value = "";
         const base64String = e.target.result.split(",")[1];
-        fileUploadWrapper.querySelector(".file-preview").src = e.target.result;
+        filePreview.src = e.target.result;
         fileUploadWrapper.classList.add("active", isImage ? "img-attached" : "file-attached");
 
         // Store file data
@@ -151,7 +156,8 @@ fileInput.addEventListener("change", () => {
 });
 
 // Cancel file
-document.querySelector("#cancel-file-btn").addEventListener("click", () => {
+document.getElementById("cancel-file-btn").addEventListener("click", () => {
     fileUploadWrapper.classList.remove("active", "img-attached", "file-attached");
+    filePreview.src = "";
     userData.file = {};
 });
