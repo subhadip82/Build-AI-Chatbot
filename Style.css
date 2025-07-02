@@ -17,6 +17,18 @@
     --scrollbar-color:#626a7f;
 
 }
+
+
+body.light-theme{
+      --text-color:#090c13;
+    --subheading-color:#7b8cae;
+    --placeholder-color:#606981;
+    --primary-color: #f3f7ff;
+    --secondary-color: #dce6f9;
+    --secondary-hover-color: #d2ddf2;
+    --scrollbar-color:#a2aac2;
+
+}
 body{
     color: var(--text-color);
     background: var(--primary-color);
@@ -128,15 +140,16 @@ background: var(--primary-color);
     align-items: center;
 }
 .chats-container .bot-message .avatar{
-    height: 60px;
-    width: 60px;
+    height: 40px;
+    width: 40px;
     flex-shrink: 0;
-    padding: 6px;
+    padding: 1px;
     align-self: flex-start;
     margin-right: -7px;
     border-radius: 50%;
-    background: var(--secondary-color);
-    border: 1px solid var(--secondary-hover-color);
+    background: var(--primary-color);
+    border: 1px solid var(--primary-color);
+    
 }
 
 .chats-container .bot-message.loading .avatar{
