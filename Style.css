@@ -178,7 +178,7 @@ animation: rotate 3s linear infinite;
 }
 
 .chats-container .user-message .img-attachment{
-width: 30%;
+width: 20%;
 margin-top: -7px;
 border-radius: 13px 3px 3px 13px ;
 }
@@ -280,13 +280,22 @@ width: 45px;
     display: none;
 }
 
-.prompt-form #cancel-file-btn{
+.prompt-form :is(#cancel-file-btn, #stop-response-btn:hover) {
     color: red;
 }
+
 .prompt-form .file-icon{
     color: #1d7efd;
 }
  
+body.bot-responding .prompt-form #stop-response-btn {
+    display: block;
+}
+.prompt-form #stop-response-btn {
+    display: none;
+}
+
+
  .prompt-form #send-prompt-btn{
     color: white;
     display: none;
