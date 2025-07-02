@@ -99,7 +99,7 @@ const handleFormSubmit = (e) => {
     userData.message = message;
 
     // Add bot-responding class to show stop button
-    document.body.classList.add("bot-responding");
+    document.body.classList.add("bot-responding", "chats-active");
 
     fileUploadWrapper.classList.remove("active", "img-attached", "file-attached");
 
@@ -123,8 +123,6 @@ const handleFormSubmit = (e) => {
         userData.file = {};
     }, 500);
 };
-
-arrow.addEventListener("click", handleFormSubmit);
 
 document.getElementById("add-file-btn").addEventListener("click", () => {
     fileInput.click();
@@ -172,7 +170,7 @@ document.getElementById("stop-response-btn").addEventListener("click", () => {
 document.querySelector("#delete-chats-btn").addEventListener("click", () => {
     chatHistory.length = 0 ;
     chatsContainer.innerHTML = "";
-    document.body.classList.remove("bot-responding");
+    document.body.classList.remove("bot-responding",  "chats-active");
 });
 
 // the color change logic
@@ -184,3 +182,20 @@ themeToggle.addEventListener('click', () => {
 const isLightTheme = localStorage.getItem("themecolor") === "light_mode";
 document.body.classList.toggle("light-theme", isLightTheme);
 themeToggle.textContent = isLightTheme ? "dark_mode" : "light_mode";
+
+// Use form submit event
+promptForm.addEventListener("submit", handleFormSubmit);
+
+// Arrow click manually triggers form submit
+arrow.addEventListener("click", () => {
+    promptForm.requestSubmit();
+});
+
+// Suggestion click: set value, set chats-active, submit form
+document.querySelectorAll(".suggestion-item").forEach(item => {
+    item.addEventListener("click", () => {
+        promptInput.value = item.querySelector(".text").textContent;
+        document.body.classList.add("chats-active");
+        promptForm.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
+    });
+});
