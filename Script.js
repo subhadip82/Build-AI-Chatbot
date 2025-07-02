@@ -13,10 +13,10 @@ const fileUploadWrapper = promptForm.querySelector(".file-upload-wrapper");
 const API_KEY = "AIzaSyCdDzUc-rM6Rqz8_A_BqWH_0OcffaEIcrY";
 const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
 
+let typingInterval, controller;
 let userData = { message: "", file: {} };
 const chatHistory = [];
 
-// Create message element
 const createMsgElement = (content, ...classes) => {
     const div = document.createElement("div");
     div.classList.add("message", ...classes);
@@ -24,30 +24,29 @@ const createMsgElement = (content, ...classes) => {
     return div;
 };
 
-// Scroll to bottom
 const scrollToBottom = () => chatsContainer.scrollTo({ top: chatsContainer.scrollHeight, behavior: "smooth" });
 
-// Typing effect
 const typingEffect = (text, textElement, botMsgDiv) => {
     textElement.textContent = "";
     const words = text.split(" ");
     let wordIndex = 0;
 
-    const typingInterval = setInterval(() => {
+    typingInterval = setInterval(() => {
         if (wordIndex < words.length) {
             textElement.textContent += (wordIndex === 0 ? "" : " ") + words[wordIndex++];
-            botMsgDiv.classList.remove("loading");
             scrollToBottom();
         } else {
             clearInterval(typingInterval);
+            botMsgDiv.classList.remove("loading");
+            document.body.classList.remove("bot-responding");
         }
     }, 40);
 };
 
 const generateResponse = async (botMsgDiv) => {
     const textElement = botMsgDiv.querySelector(".message-text");
+    controller = new AbortController();
 
-    // Prepare parts array
     const parts = [];
     if (userData.message) {
         parts.push({ text: userData.message });
@@ -61,16 +60,14 @@ const generateResponse = async (botMsgDiv) => {
         });
     }
 
-    chatHistory.push({
-        role: "user",
-        parts: parts
-    });
+    chatHistory.push({ role: "user", parts });
 
     try {
         const response = await fetch(API_URL, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ contents: chatHistory })
+            body: JSON.stringify({ contents: chatHistory }),
+            signal: controller.signal
         });
 
         const data = await response.json();
@@ -86,6 +83,7 @@ const generateResponse = async (botMsgDiv) => {
         console.log(error);
         textElement.textContent = "⚠️ Sorry, something went wrong!";
         botMsgDiv.classList.remove("loading");
+        document.body.classList.remove("bot-responding");
     } finally {
         userData.file = {};
     }
@@ -99,7 +97,11 @@ const handleFormSubmit = (e) => {
     promptInput.value = "";
     userData.message = message;
 
-    // Add user message element
+    // Add bot-responding class to show stop button
+    document.body.classList.add("bot-responding");
+
+    fileUploadWrapper.classList.remove("active", "img-attached", "file-attached");
+
     const userMsgHTML = `<p class="message-text"></p>
     ${userData.file.data ? (userData.file.isImage ? `<img src="data:${userData.file.mime_type};base64,${userData.file.data}" class="img-attachment" />` : `<p class="file-attachment"><span class="material-symbols-rounded">description</span>${userData.file.fileName}</p>`) : ""}`;
     const userMsgDiv = createMsgElement(userMsgHTML, "user-message");
@@ -108,7 +110,6 @@ const handleFormSubmit = (e) => {
     chatsContainer.appendChild(userMsgDiv);
     scrollToBottom();
 
-    // Bot typing
     setTimeout(() => {
         const botMsgHTML = `<img src="https://png.pngtree.com/png-clipart/20241223/original/pngtree-cool-blue-dragon-logo-png-image_18141282.png" class="avatar"><p class="message-text">Just a sec..</p>`;
         const botMsgDiv = createMsgElement(botMsgHTML, "bot-message", "loading");
@@ -116,17 +117,14 @@ const handleFormSubmit = (e) => {
         scrollToBottom();
         generateResponse(botMsgDiv);
 
-        // Reset file after sending
         fileUploadWrapper.classList.remove("active", "img-attached", "file-attached");
         filePreview.src = "";
         userData.file = {};
     }, 500);
 };
 
-// Listen to button click
-document.getElementById("send-prompt-btn").addEventListener("click", handleFormSubmit);
+arrow.addEventListener("click", handleFormSubmit);
 
-// File upload logic
 document.getElementById("add-file-btn").addEventListener("click", () => {
     fileInput.click();
 });
@@ -145,7 +143,6 @@ fileInput.addEventListener("change", () => {
         filePreview.src = e.target.result;
         fileUploadWrapper.classList.add("active", isImage ? "img-attached" : "file-attached");
 
-        // Store file data
         userData.file = {
             fileName: file.name,
             data: base64String,
@@ -155,9 +152,17 @@ fileInput.addEventListener("change", () => {
     };
 });
 
-// Cancel file
-document.getElementById("cancel-file-btn").addEventListener("click", () => {
+cancelFileBtn.addEventListener("click", () => {
     fileUploadWrapper.classList.remove("active", "img-attached", "file-attached");
     filePreview.src = "";
     userData.file = {};
+});
+
+document.getElementById("stop-response-btn").addEventListener("click", () => {
+    userData.file = {};
+    controller?.abort();
+    clearInterval(typingInterval);
+    const botMsg = chatsContainer.querySelector(".bot-message.loading");
+    if (botMsg) botMsg.classList.remove("loading");
+    document.body.classList.remove("bot-responding");
 });
