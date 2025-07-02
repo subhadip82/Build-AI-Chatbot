@@ -92,7 +92,7 @@ const generateResponse = async (botMsgDiv) => {
 const handleFormSubmit = (e) => {
     e.preventDefault();
     const message = promptInput.value.trim();
-    if (!message && !userData.file.data) return;
+    if (!message && !userData.file.data || document.body.classList.contains("bot-responding")) return;
 
     promptInput.value = "";
     userData.message = message;
@@ -111,7 +111,7 @@ const handleFormSubmit = (e) => {
     scrollToBottom();
 
     setTimeout(() => {
-        const botMsgHTML = `<img src="https://png.pngtree.com/png-clipart/20241223/original/pngtree-cool-blue-dragon-logo-png-image_18141282.png" class="avatar"><p class="message-text">Just a sec..</p>`;
+        const botMsgHTML = `<img src="https://i.pinimg.com/736x/1f/70/0d/1f700d8b2c3dc40bbcaeeb59d046bc74.jpg" class="avatar"><p class="message-text">Just a sec..</p>`;
         const botMsgDiv = createMsgElement(botMsgHTML, "bot-message", "loading");
         chatsContainer.appendChild(botMsgDiv);
         scrollToBottom();
@@ -166,3 +166,10 @@ document.getElementById("stop-response-btn").addEventListener("click", () => {
     if (botMsg) botMsg.classList.remove("loading");
     document.body.classList.remove("bot-responding");
 });
+
+// delet chat 
+document.querySelector("#delete-chats-btn").addEventListener("click", () => {
+    chatHistory.length = 0 ;
+    chatsContainer.innerHTML = "";
+    document.body.classList.remove("bot-responding");
+})
