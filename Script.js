@@ -8,6 +8,7 @@ const filePreview = document.querySelector(".file-preview");
 
 const arrow = document.getElementById("send-prompt-btn");
 const fileUploadWrapper = promptForm.querySelector(".file-upload-wrapper");
+const themeToggle = document.querySelector("#theme-toggle-btn");
 
 // API setup
 const API_KEY = "AIzaSyCdDzUc-rM6Rqz8_A_BqWH_0OcffaEIcrY";
@@ -172,4 +173,14 @@ document.querySelector("#delete-chats-btn").addEventListener("click", () => {
     chatHistory.length = 0 ;
     chatsContainer.innerHTML = "";
     document.body.classList.remove("bot-responding");
-})
+});
+
+// the color change logic
+themeToggle.addEventListener('click', () => {
+     const isLightTheme =  document.body.classList.toggle("light-theme");
+     localStorage.setItem("themecolor", isLightTheme ? "light_mode" : "dark_mode");
+     themeToggle.textContent = isLightTheme ? "dark_mode" : "light_mode";
+});
+const isLightTheme = localStorage.getItem("themecolor") === "light_mode";
+document.body.classList.toggle("light-theme", isLightTheme);
+themeToggle.textContent = isLightTheme ? "dark_mode" : "light_mode";
