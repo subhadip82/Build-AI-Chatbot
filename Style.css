@@ -44,11 +44,12 @@ body{
 }
 .container :where(.app-header, .suggestions ,.message,.prompt-wrapper , 
 .disclaimer-text) {
-    margin: 0 aut0;
+    margin: 0 auto; /* <<< typo: should be auto, not aut0 */
     width: 100%;
     padding: 0 20px;
     max-width: 980px;
 }
+
 /* app heder styling*/
 .container .app-header{
     margin-top: 4vh;
@@ -78,7 +79,7 @@ body{
  overflow-x: auto;
  scrollbar-width: none;
 }
-.container :is(.app-header, .suggestions){
+body.chats-active .container :where(.app-header, .suggestions){
     display: none;
 }
 
@@ -330,22 +331,9 @@ body.bot-responding .prompt-form #stop-response-btn {
     0 0 100px rgb(51, 46, 197), 0 0 200px rgb(55, 55, 192)
  }
 
-
-
-
-
-
-
-
-
-
-
-/* --------------------------- */
-/*      MEDIA QUERIES          */
-/* --------------------------- */
-
-/* Large tablets and small desktops (max-width: 1200px) */
-/* @media (max-width: 1200px) {
+/* 
+Large tablets and small desktops (max-width: 1200px) */
+@media (max-width: 1200px) {
   .container {
     margin-left: 200px;
     padding: 20px 30px 50px;
@@ -356,10 +344,10 @@ body.bot-responding .prompt-form #stop-response-btn {
   .chats-container .user-message .message-text {
     max-width: 80%;
   }
-} */
-
-/* Tablets (max-width: 992px) */
-/* @media (max-width: 992px) {
+}
+/* 
+Tablets (max-width: 992px) */
+@media (max-width: 992px) {
   .container {
     margin-left: 0;
     padding: 20px 20px 50px;
@@ -371,10 +359,10 @@ body.bot-responding .prompt-form #stop-response-btn {
     max-width: 90%;
     margin-right: 20px;
   }
-} */
+}
 
 /* Small tablets and large mobiles (max-width: 768px) */
-/* @media (max-width: 768px) {
+@media (max-width: 768px) {
   .container {
     padding: 15px 15px 40px;
   }
@@ -399,10 +387,10 @@ body.bot-responding .prompt-form #stop-response-btn {
   .prompt-wrapper .prompt-form {
     border-radius: 100px;
   }
-} */
+}
 
 /* Mobiles (max-width: 576px) */
-/* @media (max-width: 576px) {
+ @media (max-width: 576px) {
   .app-header .heading {
     font-size: 1.8rem;
   }
@@ -432,10 +420,10 @@ body.bot-responding .prompt-form #stop-response-btn {
     font-size: 0.8rem;
     padding: 12px 15px 0;
   }
-} */
+} 
 
 /* Extra small mobiles (max-width: 400px) */
-/* @media (max-width: 400px) {
+@media (max-width: 400px) {
   .app-header .heading {
     font-size: 1.5rem;
   }
@@ -452,4 +440,4 @@ body.bot-responding .prompt-form #stop-response-btn {
   .prompt-wrapper button {
     width: 40px;
   }
-} */
+}
