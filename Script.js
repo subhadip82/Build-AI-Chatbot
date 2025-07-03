@@ -112,7 +112,7 @@ const handleFormSubmit = (e) => {
     scrollToBottom();
 
     setTimeout(() => {
-        const botMsgHTML = `<img src="https://i.pinimg.com/736x/1f/70/0d/1f700d8b2c3dc40bbcaeeb59d046bc74.jpg" class="avatar"><p class="message-text">Just a sec..</p>`;
+        const botMsgHTML = `<img src="https://i.ibb.co/B5Nc15Th/1f700d8b2c3dc40bbcaeeb59d046bc74-1-removebg-preview.png" class="avatar"><p class="message-text">Just a sec..</p>`;
         const botMsgDiv = createMsgElement(botMsgHTML, "bot-message", "loading");
         chatsContainer.appendChild(botMsgDiv);
         scrollToBottom();
