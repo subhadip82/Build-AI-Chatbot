@@ -1,5 +1,5 @@
 var typed = new Typed('.neon-heading', {
-  strings: ['Welcome Dip Chat Bot'],
+  strings: ['Hii There<br>Welcome Dip Chat Bot'],
   typeSpeed: 50,
   backSpeed: 100,
   backDelay: 1000,
