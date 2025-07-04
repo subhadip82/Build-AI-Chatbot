@@ -452,3 +452,28 @@ Tablets (max-width: 992px) */
     width: 40px;
   }
 }
+
+
+/* Mic recording active style */
+#microphonr-voice-btn.listening {
+    color: white !important;
+    background: #ff4b5c !important;
+    animation: micPulse 1.2s infinite;
+    box-shadow: 0 0 10px rgba(255, 75, 92, 0.7), 0 0 20px rgba(255, 75, 92, 0.5);
+}
+
+/* Mic pulse animation */
+@keyframes micPulse {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 0 10px rgba(255, 75, 92, 0.7);
+    }
+    50% {
+        transform: scale(1.1);
+        box-shadow: 0 0 20px rgba(255, 75, 92, 1);
+    }
+    100% {
+        transform: scale(1);
+        box-shadow: 0 0 10px rgba(255, 75, 92, 0.7);
+    }
+}
