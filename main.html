@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ChatBot</title>
+   <link rel="shortcut icon" type="image/jpg" href="https://png.pngtree.com/png-clipart/20241223/original/pngtree-cool-blue-dragon-logo-png-image_18141282.png"/>
+
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded" />
+  <link rel="stylesheet" href="Style.css" />
+</head>
+
+<body>
+  <div class="container">
+    <!-- App Header -->
+    <header class="app-header">
+      <h1 class="heading">Hello, There
+        <br>
+        I am Dip
+      </h1>
+      <h2 class="sub-heading">How can I help you?</h2>
+    </header>
+
+    <!-- Suggestion bar -->
+    <ul class="suggestions">
+      <li class="suggestion-item">
+        <p class="text">Design a home office setup for remote work under $500?</p>
+        <span class="material-symbols-rounded">draw</span>
+      </li>
+      <li class="suggestion-item">
+        <p class="text">How can I level up my web development expertise in 2025?</p>
+        <span class="material-symbols-rounded">lightbulb</span>
+      </li>
+      <li class="suggestion-item">
+        <p class="text">Suggest some useful tools for debugging JavaScript code.</p>
+        <span class="material-symbols-rounded">code_off</span>
+      </li>
+      <li class="suggestion-item">
+        <p class="text">Create a React JS component for a simple todo list app.</p>
+        <span class="material-symbols-rounded">draw</span>
+      </li>
+    </ul>
+
+    <!--CHATS  CONTYENER-->
+    <div class="chats-container">
+     
+    </div>
+
+    <!-- Prompt container -->
+    <div class="prompt-container">
+      
+      <div class="prompt-wrapper">
+        <form action="#" class="prompt-form">
+          <input type="text" placeholder="Ask Dbot" class="prompt-input" required >
+          <div class="prompt-action">
+             <button id="microphonr-voice-btn" type="button" class="material-symbols-rounded">mic</button>
+             <!--file uplode wrapper-->
+         <div class="file-upload-wrapper  ">
+          <img src="#" class="file-preview">
+          <input type="file" accept="image/*, .pdf, .txt, .csv" id="file-input" hidden>
+             <button  type="button" class="file-icon material-symbols-rounded">description</button>
+          <button id="add-file-btn" type="button" class="material-symbols-rounded">attach_file</button>
+              <button id="cancel-file-btn" type="button" class="material-symbols-rounded">close</button>
+            </div>
+
+             <button id="stop-response-btn" type="button" class="material-symbols-rounded">stop_circle</button>
+            <button id="send-prompt-btn" type="button" class="material-symbols-rounded">arrow_upward</button>
+          </div>
+        </form>
+
+        <button  id="theme-toggle-btn" type="button" class="material-symbols-rounded">light_mode</button>
+        <button id="delete-chats-btn" type="button" class="material-symbols-rounded">delete</button>
+        
+      </div>
+
+      <p class="disclaimer-text">Dbot can make mistakes, so double-check it .</p>
+    </div>
+  </div>
+
+
+
+
+
+
+   <script src="Script.js"> </script>
+</body>
+</html>
