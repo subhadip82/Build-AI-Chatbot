@@ -127,6 +127,48 @@ document.getElementById("add-file-btn").addEventListener("click", () => {
     fileInput.click();
 });
 
+//  Add voice-to-text logic
+let recognition;
+let isListening = false;
+
+if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    recognition = new SpeechRecognition();
+    recognition.continuous = false;
+    recognition.lang = 'en-US';
+
+    recognition.onstart = () => {
+        micBtn.classList.add("listening");
+    };
+
+    recognition.onend = () => {
+        micBtn.classList.remove("listening");
+        isListening = false;
+
+        // Submit if text exists
+        if (promptInput.value.trim()) {
+            promptForm.requestSubmit();
+        }
+    };
+
+    recognition.onresult = (event) => {
+        const transcript = event.results[0][0].transcript;
+        promptInput.value = transcript;
+    };
+
+    micBtn.addEventListener("click", () => {
+        if (!isListening) {
+            recognition.start();
+            isListening = true;
+        } else {
+            recognition.stop();
+        }
+    });
+} else {
+    micBtn.disabled = true;
+    micBtn.title = "Speech Recognition not supported in this browser";
+}
+
 fileInput.addEventListener("change", () => {
     const file = fileInput.files[0];
     if (!file) return;
@@ -193,44 +235,3 @@ document.querySelectorAll(".suggestion-item").forEach(item => {
     });
 });
 
-// ✅ Add voice-to-text logic
-let recognition;
-let isListening = false;
-
-if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    recognition = new SpeechRecognition();
-    recognition.continuous = false;
-    recognition.lang = 'en-US';
-
-    recognition.onstart = () => {
-        micBtn.classList.add("listening");
-    };
-
-    recognition.onend = () => {
-        micBtn.classList.remove("listening");
-        isListening = false;
-
-        // Submit if text exists
-        if (promptInput.value.trim()) {
-            promptForm.requestSubmit();
-        }
-    };
-
-    recognition.onresult = (event) => {
-        const transcript = event.results[0][0].transcript;
-        promptInput.value = transcript;
-    };
-
-    micBtn.addEventListener("click", () => {
-        if (!isListening) {
-            recognition.start();
-            isListening = true;
-        } else {
-            recognition.stop();
-        }
-    });
-} else {
-    micBtn.disabled = true;
-    micBtn.title = "Speech Recognition not supported in this browser";
-}
