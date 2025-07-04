@@ -9,6 +9,7 @@ const filePreview = document.querySelector(".file-preview");
 const arrow = document.getElementById("send-prompt-btn");
 const fileUploadWrapper = promptForm.querySelector(".file-upload-wrapper");
 const themeToggle = document.querySelector("#theme-toggle-btn");
+const micBtn = document.getElementById("microphonr-voice-btn");
 
 // API setup
 const API_KEY = "AIzaSyCqMG6MmxAFvKc0vpGVcgCDHpmBkNogAlk";
@@ -98,9 +99,7 @@ const handleFormSubmit = (e) => {
     promptInput.value = "";
     userData.message = message;
 
-    // Add bot-responding class to show stop button
     document.body.classList.add("bot-responding", "chats-active");
-
     fileUploadWrapper.classList.remove("active", "img-attached", "file-attached");
 
     const userMsgHTML = `<p class="message-text"></p>
@@ -166,32 +165,26 @@ document.getElementById("stop-response-btn").addEventListener("click", () => {
     document.body.classList.remove("bot-responding");
 });
 
-// delet chat 
 document.querySelector("#delete-chats-btn").addEventListener("click", () => {
-    chatHistory.length = 0 ;
+    chatHistory.length = 0;
     chatsContainer.innerHTML = "";
-    document.body.classList.remove("bot-responding",  "chats-active");
+    document.body.classList.remove("bot-responding", "chats-active");
 });
 
-// the color change logic
 themeToggle.addEventListener('click', () => {
-     const isLightTheme =  document.body.classList.toggle("light-theme");
-     localStorage.setItem("themecolor", isLightTheme ? "light_mode" : "dark_mode");
-     themeToggle.textContent = isLightTheme ? "dark_mode" : "light_mode";
+    const isLightTheme = document.body.classList.toggle("light-theme");
+    localStorage.setItem("themecolor", isLightTheme ? "light_mode" : "dark_mode");
+    themeToggle.textContent = isLightTheme ? "dark_mode" : "light_mode";
 });
 const isLightTheme = localStorage.getItem("themecolor") === "light_mode";
 document.body.classList.toggle("light-theme", isLightTheme);
 themeToggle.textContent = isLightTheme ? "dark_mode" : "light_mode";
 
-// Use form submit event
 promptForm.addEventListener("submit", handleFormSubmit);
-
-// Arrow click manually triggers form submit
 arrow.addEventListener("click", () => {
     promptForm.requestSubmit();
 });
 
-// Suggestion click: set value, set chats-active, submit form
 document.querySelectorAll(".suggestion-item").forEach(item => {
     item.addEventListener("click", () => {
         promptInput.value = item.querySelector(".text").textContent;
@@ -199,3 +192,45 @@ document.querySelectorAll(".suggestion-item").forEach(item => {
         promptForm.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
     });
 });
+
+// ✅ Add voice-to-text logic
+let recognition;
+let isListening = false;
+
+if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    recognition = new SpeechRecognition();
+    recognition.continuous = false;
+    recognition.lang = 'en-US';
+
+    recognition.onstart = () => {
+        micBtn.classList.add("listening");
+    };
+
+    recognition.onend = () => {
+        micBtn.classList.remove("listening");
+        isListening = false;
+
+        // Submit if text exists
+        if (promptInput.value.trim()) {
+            promptForm.requestSubmit();
+        }
+    };
+
+    recognition.onresult = (event) => {
+        const transcript = event.results[0][0].transcript;
+        promptInput.value = transcript;
+    };
+
+    micBtn.addEventListener("click", () => {
+        if (!isListening) {
+            recognition.start();
+            isListening = true;
+        } else {
+            recognition.stop();
+        }
+    });
+} else {
+    micBtn.disabled = true;
+    micBtn.title = "Speech Recognition not supported in this browser";
+}
